@@ -1,0 +1,732 @@
+# MCP Accessibility Evaluator
+
+An advanced MCP (Model Context Protocol) server that provides **comprehensive accessibility evaluation with detailed explanations** for web content. This tool offers educational insights, user impact analysis, and actionable solutions for every accessibility issue found.
+
+## ✨ Enhanced Features
+
+- 🧠 **Intelligent Issue Analysis**: Enhanced explanations with detailed context about why accessibility matters
+- 📚 **Educational Content**: Comprehensive explanations of user impact and assistive technology effects  
+- 🔧 **Actionable Solutions**: Step-by-step fixes with working code examples (good vs. bad examples)
+- 🎯 **WCAG 2.1 Compliance**: Complete A, AA, AAA level checking with detailed scoring
+- 🏷️ **Advanced ARIA Validation**: Comprehensive WAI-ARIA usage validation with best practices
+- ⚡ **Real-time Evaluation**: Instant feedback for HTML content or live URLs
+- 📖 **Live Documentation**: Fetches and caches latest W3C and MDN accessibility standards
+- 🤖 **AI Assistant Integration**: Seamless integration with Claude Desktop, GitHub Copilot, and other AI tools
+- 🧪 **Comprehensive Testing**: Integrates axe-core library for additional accessibility checks
+- 📊 **Detailed Reporting**: Summary statistics, compliance scoring, and progress tracking
+
+## 🚀 Quick Start
+
+### Automated Setup
+
+```bash
+# 1. Navigate to the evaluator directory
+cd mcp-accessibility-evaluator
+
+# 2. Run the automated setup script
+./setup-mcp.sh
+
+# 3. Follow the prompts for your AI assistant configuration
+```bash
+
+### Manual Installation
+
+```bash
+# Install dependencies
+npm install
+
+# Build the project
+npm run build
+
+# Test the installation
+npm test
+```bash
+
+## 🔧 Configuration
+
+### Claude Desktop Integration
+
+Add to your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "accessibility-evaluator": {
+      "command": "node",
+      "args": ["/absolute/path/to/mcp-accessibility-evaluator/dist/index.js"],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  }
+}
+```
+
+### Cursor Integration
+
+Add to your `~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "accessibility-evaluator": {
+      "command": "node",
+      "args": [
+        "/path-to-local-repository/mcp-accessibility-evaluator/dist/index.js"
+      ]
+    }
+  }
+}
+```bash
+
+### GitHub Copilot Integration
+
+The evaluator works seamlessly with GitHub Copilot workflows for automated accessibility analysis in pull requests.
+
+## 🛠️ Available Tools
+
+### 1. `evaluate_accessibility`
+
+Performs comprehensive accessibility evaluation with enhanced explanations for every issue found.
+
+**Parameters:**
+
+- `html` (string): HTML content to evaluate
+- `url` (string): URL to fetch and evaluate (alternative to HTML)
+
+**Enhanced Output Example:**
+
+```json
+{
+  "issues": [
+    {
+      "type": "error",
+      "rule": "WCAG 1.1.1",
+      "message": "Images must have alternative text",
+      "element": "<img src=\"logo.png\">",
+      "selector": "img",
+      "standard": "WCAG",
+      "level": "A",
+      "impact": "critical",
+      "detailedExplanation": "Images and other non-text content must have alternative text that serves the same purpose and conveys the same information as the visual content. This ensures that users who cannot see images can still understand the content through screen readers or other assistive technologies.",
+      "userImpact": "Users who are blind or have low vision rely on screen readers to understand web content. Without alternative text, images are completely inaccessible to these users, creating a significant barrier to understanding the page content.",
+      "why": "Alternative text is the primary way that visual information is made accessible to users with visual impairments. It also helps when images fail to load and provides context for search engines.",
+      "assistiveTechnologyImpact": "Screen readers will either skip the image entirely (providing no information) or announce 'image' or the filename, which is rarely meaningful to users.",
+      "howToFix": {
+        "steps": [
+          "Add an alt attribute to every img element",
+          "Write descriptive text that conveys the purpose and content of the image",
+          "For decorative images, use alt=\"\" (empty alt attribute)",
+          "For complex images, consider using aria-describedby to reference detailed descriptions"
+        ],
+        "badExample": "<img src=\"chart.jpg\">",
+        "goodExample": "<img src=\"chart.jpg\" alt=\"Sales increased 25% from Q1 to Q2 2024\">",
+        "codeExample": "<!-- For informative images -->\n<img src=\"logo.jpg\" alt=\"Company Name - Building Better Websites\">\n\n<!-- For decorative images -->\n<img src=\"decorative-border.jpg\" alt=\"\">\n\n<!-- For complex images -->\n<img src=\"complex-chart.jpg\" alt=\"Quarterly sales data\" aria-describedby=\"chart-description\">\n<div id=\"chart-description\">\n  Detailed description of the chart data...\n</div>"
+      },
+      "relatedGuidelines": ["WCAG 2.1 Success Criterion 1.1.1 Non-text Content"],
+      "documentationLinks": [
+        "https://www.w3.org/WAI/WCAG21/Understanding/non-text-content.html",
+        "https://webaim.org/articles/alt/"
+      ]
+    }
+  ],
+  "summary": {
+    "totalIssues": 1,
+    "errors": 1,
+    "warnings": 0,
+    "info": 0,
+    "byStandard": { "WCAG": 1 },
+    "byImpact": { "critical": 1 }
+  },
+  "passedChecks": [
+    "WCAG: headings-structure",
+    "ARIA: aria-required-attr"
+  ]
+}
+```json
+
+### 2. `check_wcag_compliance`
+
+Analyzes WCAG 2.1 compliance with detailed scoring and recommendations.
+
+**Parameters:**
+
+- `html` (string): HTML content to check
+- `url` (string): URL to fetch and check
+- `targetLevel` (string): 'A', 'AA', or 'AAA' (default: 'AA')
+
+**Output Example:**
+
+```json
+{
+  "level": "A",
+  "overallScore": 78,
+  "meetsTarget": false,
+  "targetLevel": "AA",
+  "passedCriteria": [
+    {
+      "id": "1.1.1",
+      "name": "Non-text Content",
+      "level": "A"
+    }
+  ],
+  "failedCriteria": [
+    {
+      "id": "1.4.3",
+      "name": "Contrast (Minimum)",
+      "level": "AA",
+      "impact": "serious"
+    }
+  ],
+  "notApplicable": [],
+  "scoreByPrinciple": {
+    "perceivable": 75,
+    "operable": 80,
+    "understandable": 85,
+    "robust": 70
+  },
+  "recommendations": [
+    "1.4.3 Contrast (Minimum): Ensure text has sufficient color contrast. Consider implementing techniques G18, G148, G174 to meet this AA requirement."
+  ]
+}
+```bash
+
+### 3. `validate_aria`
+
+Validates ARIA usage with comprehensive best practice recommendations.
+
+**Parameters:**
+
+- `html` (string): HTML content to validate
+- `url` (string): URL to fetch and validate
+
+**Output Example:**
+
+```json
+{
+  "issues": [
+    {
+      "type": "error",
+      "rule": "ARIA Required Attributes",
+      "message": "Elements with role=\"checkbox\" must have aria-checked attribute",
+      "element": "<div role=\"checkbox\">Option 1</div>",
+      "selector": "div[role=\"checkbox\"]",
+      "standard": "ARIA",
+      "impact": "serious"
+    }
+  ],
+  "validUsages": [
+    {
+      "element": "<button aria-expanded=\"false\">Menu</button>",
+      "explanation": "Proper use of aria-expanded to indicate collapsed state"
+    }
+  ],
+  "ariaStatistics": {
+    "rolesUsed": ["checkbox", "button"],
+    "propertiesUsed": ["aria-expanded"],
+    "statesUsed": ["aria-checked"],
+    "totalAriaElements": 3
+  }
+}
+```bash
+
+### 4. `fetch_accessibility_docs`
+
+Fetches and caches the latest accessibility documentation from official sources.
+
+**Parameters:**
+
+- `sources` (array): ['wcag', 'aria', 'mdn', 'all'] (default: ['all'])
+
+## 🎓 Enhanced Learning Experience
+
+### Educational Approach
+
+This evaluator is designed to teach accessibility best practices, not just identify issues:
+
+#### For Each Issue, You Get
+
+1. **Detailed Explanation**: Why the rule exists and its importance
+2. **User Impact Analysis**: How the issue affects real users with disabilities  
+3. **Assistive Technology Impact**: Specific effects on screen readers and other tools
+4. **Step-by-Step Solutions**: Clear instructions for fixing the issue
+5. **Code Examples**: Working examples showing both incorrect and correct implementations
+6. **Related Guidelines**: Links to official WCAG and ARIA documentation
+7. **Context**: Understanding when and why to apply specific techniques
+
+#### Progressive Learning
+
+- **Beginners**: Start with critical errors and basic WCAG A requirements
+- **Intermediate**: Move to AA compliance and ARIA best practices  
+- **Advanced**: Tackle AAA requirements and complex interaction patterns
+
+## 💡 Usage Examples
+
+### Example 1: Basic HTML Evaluation
+
+**Input HTML:**
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sample Page</title>
+</head>
+<body>
+  <img src="logo.png">
+  <h3>Welcome</h3>
+  <form>
+    <input type="email" placeholder="Enter email">
+    <button>Submit</button>
+  </form>
+</body>
+</html>
+```bash
+
+**AI Assistant Interaction:**
+
+```text
+You: "Evaluate this HTML for accessibility issues and explain each problem"
+
+AI Response:
+"I found 3 accessibility issues in your HTML:
+
+1. **Missing Alt Text (Critical Error - WCAG 1.1.1)**
+   - Issue: The logo image has no alt attribute
+   - User Impact: Screen reader users won't know what the image represents
+   - Fix: Add alt="Company Name" or descriptive text
+   - Code: <img src="logo.png" alt="Company Logo">
+
+2. **Skipped Heading Level (Warning - WCAG 1.3.1)**  
+   - Issue: You have h3 without h1 or h2 first
+   - User Impact: Screen reader users rely on heading hierarchy for navigation
+   - Fix: Use h1 for main title, then h2, h3 in order
+   - Code: <h1>Welcome</h1> or <h2>Welcome</h2>
+
+3. **Missing Form Label (Critical Error - WCAG 1.3.1)**
+   - Issue: Email input has no accessible label
+   - User Impact: Screen reader users won't know what to enter
+   - Fix: Add proper label association
+   - Code: <label for="email">Email Address</label><input type="email" id="email">
+
+Let me know if you'd like detailed explanations of why these matter for accessibility!"
+```bash
+
+### Example 2: WCAG Compliance Analysis
+
+**AI Assistant Interaction:**
+
+```text
+You: "Check WCAG AA compliance for this page and explain what needs to be fixed"
+
+AI Response:
+"Your page currently meets WCAG Level A (78% compliance score) but doesn't meet the AA target.
+
+**What's Working Well:**
+✅ Document has a title
+✅ HTML language is specified  
+✅ No duplicate IDs found
+
+**What Needs Fixing for AA Compliance:**
+
+1. **Color Contrast Issues** (1.4.3 - AA Requirement)
+   - Text contrast ratio is 3.2:1, needs 4.5:1 minimum
+   - Impact: Users with low vision or color blindness may not be able to read text
+   - Solution: Use darker text color or lighter background
+
+2. **Form Labels Missing** (3.3.2 - AA Requirement)  
+   - Email input needs visible label text
+   - Impact: Users may not understand what information is required
+   - Solution: Add clear, descriptive labels for all form fields
+
+**Compliance Breakdown:**
+- Perceivable: 75% (needs contrast fixes)
+- Operable: 80% (good keyboard accessibility)
+- Understandable: 85% (clear language and structure)
+- Robust: 70% (needs ARIA improvements)
+
+Fix these 2 issues to achieve AA compliance!"
+```bash
+
+### Example 3: ARIA Validation with Learning
+
+**AI Assistant Interaction:**
+
+```text
+You: "Validate this custom dropdown component and teach me about ARIA best practices"
+
+Input:
+<div class="dropdown">
+  <button>Select Option</button>
+  <ul class="options">
+    <li>Option 1</li>
+    <li>Option 2</li>
+  </ul>
+</div>
+
+AI Response:
+"Your dropdown needs ARIA attributes for accessibility. Here's what's missing and why:
+
+**Issues Found:**
+1. Button doesn't indicate it controls a menu
+2. List isn't properly identified as a menu  
+3. No indication if menu is open/closed
+4. List items aren't proper menu items
+
+**ARIA Best Practices for Dropdowns:**
+
+📚 **Core Concept**: ARIA roles and properties create semantic relationships that assistive technology can understand.
+
+**Fixed Code with Explanations:**
+<div class="dropdown">
+  <button 
+    aria-haspopup="true"     <!-- Tells screen readers this opens a menu -->
+    aria-expanded="false"    <!-- Indicates current state (closed) -->
+    aria-controls="dropdown-menu"  <!-- Links to the menu it controls -->
+  >
+    Select Option
+  </button>
+  <ul 
+    id="dropdown-menu"       <!-- Matches aria-controls above -->
+    role="menu"              <!-- Identifies this as a menu -->
+    aria-labelledby="dropdown-button"  <!-- Links back to button -->
+  >
+    <li role="menuitem">Option 1</li>  <!-- Proper menu items -->
+    <li role="menuitem">Option 2</li>
+  </ul>
+</div>
+
+**JavaScript Requirements:**
+- Toggle aria-expanded when opening/closing
+- Manage focus for keyboard navigation
+- Handle Escape key to close menu
+
+**Why This Matters:**
+Screen readers announce: 'Select Option, button, has popup' and can navigate menu items with arrow keys, just like native select elements!"
+```bash
+
+## ⚙️ Configuration
+
+The MCP Accessibility Evaluator supports comprehensive configuration through JSON files, environment variables, and package.json settings. This allows you to customize WCAG levels, evaluation criteria, and reporting preferences.
+
+### Quick Configuration Setup
+
+1. **Copy the base configuration**:
+
+   ```bash
+   cp accessibility.config.json my-accessibility.config.json
+   ```
+
+2. **Modify settings** for your needs:
+
+   ```json
+   {
+     "wcag": {
+       "defaultLevel": "AA",
+       "strictMode": false
+     },
+     "evaluation": {
+       "minImpactLevel": "moderate",
+       "includeCodeExamples": true
+     },
+     "reporting": {
+       "format": "detailed",
+       "includeRecommendations": true
+     }
+   }
+   ```
+
+### Configuration File Locations
+
+The tool automatically searches for configuration files in this order:
+
+1. **Project-level**: `accessibility.config.json`, `.accessibilityrc.json`
+2. **Package.json**: `"accessibility": { ... }` field
+3. **Home directory**: `~/.accessibility.config.json`
+4. **Environment variables**: `ACCESSIBILITY_WCAG_LEVEL`, etc.
+
+### WCAG Level Configuration
+
+Set your default WCAG compliance level:
+
+```json
+{
+  "wcag": {
+    "defaultLevel": "A",      // "A", "AA", or "AAA"
+    "strictMode": false,      // Strict guideline interpretation
+    "disabledCriteria": ["3.1.5"]  // Skip specific criteria
+  }
+}
+```bash
+
+**Example Configurations:**
+
+- **Level A (Basic)**: Focus on critical accessibility barriers
+- **Level AA (Standard)**: Recommended for most websites and legal compliance
+- **Level AAA (Enhanced)**: Maximum accessibility compliance
+
+### Environment Variables
+
+Override settings with environment variables:
+
+```bash
+# Set default WCAG level
+export ACCESSIBILITY_WCAG_LEVEL=AAA
+
+# Set minimum impact level to report
+export ACCESSIBILITY_MIN_IMPACT=serious
+
+# Set reporting format
+export ACCESSIBILITY_REPORT_FORMAT=summary
+```bash
+
+### Pre-built Configuration Examples
+
+The `config-examples/` directory contains ready-to-use configurations:
+
+- **`basic-level-a.json`**: Minimal compliance checking
+- **`comprehensive-aaa.json`**: Maximum accessibility compliance
+- **`development.json`**: Optimized for developers
+
+### Configuration Benefits
+
+- 🎯 **Targeted Testing**: Focus on specific WCAG levels or criteria
+- ⚡ **Performance**: Skip irrelevant checks for faster evaluation
+- 📊 **Consistent Reporting**: Standardize output across your team
+- 🔧 **Team Workflows**: Share configurations across projects
+
+📚 **See [CONFIG_GUIDE.md](CONFIG_GUIDE.md) for comprehensive configuration documentation.**
+
+## 🏗️ Architecture & Technical Details
+
+### Core Components
+
+1. **ExplanationGenerator**: Enhances basic accessibility issues with educational content
+2. **AccessibilityEvaluator**: Core evaluation engine with built-in WCAG and ARIA rules
+3. **WCAGComplianceChecker**: Analyzes results against WCAG 2.1 criteria with scoring
+4. **ARIAValidator**: Specialized validation for WAI-ARIA usage patterns
+5. **DocumentationFetcher**: Caches official W3C and MDN accessibility documentation
+6. **MCP Server**: Exposes all functionality via Model Context Protocol
+
+### Enhanced Issue Processing
+
+Each accessibility issue goes through enhancement layers:
+
+```typescript
+// Basic issue from evaluator
+const basicIssue = {
+  type: 'error',
+  rule: 'WCAG 1.1.1',
+  message: 'Images must have alternative text'
+};
+
+// Enhanced with educational content
+const enhancedIssue = ExplanationGenerator.enhanceIssue(basicIssue);
+// Now includes: detailedExplanation, userImpact, howToFix, codeExamples, etc.
+```bash
+
+### Compliance Scoring Algorithm
+
+- **Level A**: Basic accessibility (25 criteria)
+- **Level AA**: Standard compliance (38 additional criteria)  
+- **Level AAA**: Enhanced accessibility (23 additional criteria)
+- **Scoring**: Weighted by impact and importance
+
+## 🚀 Development & Testing
+
+### Development Setup
+
+```bash
+# Install dependencies
+npm install
+
+# Build the project  
+npm run build
+
+# Development mode with hot reload
+npm run dev
+
+# Type checking
+npm run type-check
+```bash
+
+### Comprehensive Testing
+
+```bash
+# Run full test suite
+npm test
+
+# Watch mode for development
+npm run test:watch
+
+# Coverage report
+npm run test:coverage
+
+# Quick test runner with enhanced output
+./run-tests.sh
+
+# Coverage with detailed reporting
+./run-tests.sh --coverage
+```bash
+
+### Test Architecture
+
+```text
+src/__tests__/
+├── accessibility-evaluator.test.ts  # Core evaluation engine
+├── aria-validator.test.ts          # ARIA validation logic
+├── documentation-fetcher.test.ts   # Documentation caching
+├── index.test.ts                   # MCP server integration
+├── setup.ts                        # Test configuration
+└── wcag-compliance-checker.test.ts # Compliance algorithms
+```bash
+
+### Quality Standards
+
+- **80%+ Code Coverage**: Comprehensive test coverage required
+- **TypeScript Strict Mode**: Full type safety
+- **Jest Testing**: Unit and integration tests
+- **GitHub Actions**: Automated CI/CD pipeline
+
+## 📋 Best Practices & Guidelines
+
+### For Developers
+
+1. **Start with Level AA**: Most practical target for web accessibility
+2. **Fix Critical Errors First**: Address errors before warnings  
+3. **Test Real Content**: Use actual content, not Lorem ipsum
+4. **Regular Integration**: Include accessibility checks in your development workflow
+5. **Learn from Issues**: Use the enhanced explanations to improve your accessibility knowledge
+
+### For AI Assistants
+
+1. **Educational Focus**: Always explain the "why" behind accessibility issues
+2. **Progressive Complexity**: Start with basic issues, build to advanced patterns
+3. **Practical Examples**: Provide working code examples for fixes
+4. **User Impact**: Always explain how issues affect real users with disabilities
+5. **Encourage Testing**: Suggest manual testing with actual assistive technology
+
+### Integration Patterns
+
+```bash
+# CI/CD Integration
+- name: Accessibility Check
+  run: |
+    npm run build
+    node dist/index.js evaluate_accessibility --url=${{ env.PREVIEW_URL }}
+
+# Pre-commit Hook
+npx accessibility-evaluator --html="$(cat dist/index.html)"
+
+# VS Code Integration  
+# Use with MCP-compatible VS Code extensions
+```bash
+
+## 🔍 Advanced Features
+
+### Custom Rule Development
+
+Extend the evaluator with custom accessibility rules:
+
+```typescript
+// Add custom rule to AccessibilityEvaluator
+this.wcagRules.set('custom-focus-indicators', {
+  check: ($: cheerio.CheerioAPI) => {
+    // Your custom validation logic
+    return issues;
+  }
+});
+```bash
+
+### Documentation Updates
+
+Keep accessibility documentation current:
+
+```bash
+# Fetch latest W3C and MDN docs
+npm run update-docs
+
+# Cache documentation locally
+npm run cache-docs
+```bash
+
+### Performance Optimization
+
+- **Cached Documentation**: Reduces API calls to W3C/MDN
+- **Parallel Processing**: Multiple checks run simultaneously  
+- **Incremental Analysis**: Only re-evaluate changed content
+- **Efficient Selectors**: Optimized CSS selectors for large documents
+
+## 🚨 Known Limitations
+
+- **Automated Testing Scope**: Catches ~40% of accessibility issues (manual testing still required)
+- **JavaScript Interactions**: Cannot test dynamic interactions or keyboard navigation
+- **Cognitive Accessibility**: Limited detection of cognitive/learning disability barriers  
+- **Context Sensitivity**: Cannot evaluate content meaningfulness or reading flow
+- **Platform Differences**: Screen reader behavior varies across platforms
+
+## 🤝 Contributing
+
+We welcome contributions! Please:
+
+1. **Follow Code Style**: Use TypeScript strict mode and existing patterns
+2. **Add Comprehensive Tests**: Include unit tests for new features  
+3. **Update Documentation**: Keep README and inline docs current
+4. **Educational Focus**: Enhance explanations and learning content
+5. **Submit Quality PRs**: Include clear descriptions and working examples
+
+### Development Workflow
+
+```bash
+# 1. Fork and clone
+git clone your-fork-url
+cd mcp-accessibility-evaluator
+
+# 2. Create feature branch
+git checkout -b feature/enhanced-aria-validation
+
+# 3. Develop with tests
+npm run dev
+npm test
+
+# 4. Submit PR with examples
+git push origin feature/enhanced-aria-validation
+```bash
+
+## 📜 License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+## 📚 Resources & References
+
+### Official Documentation
+
+- [WCAG 2.1 Guidelines](https://www.w3.org/WAI/WCAG21/quickref/) - Complete WCAG reference
+- [WAI-ARIA Specification](https://www.w3.org/TR/wai-aria/) - Official ARIA specification
+- [ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/) - Implementation patterns
+- [MDN Accessibility](https://developer.mozilla.org/en-US/docs/Web/Accessibility) - Developer guides
+
+### Testing Tools
+
+- [axe-core](https://github.com/dequelabs/axe-core) - Accessibility testing engine
+- [WAVE](https://wave.webaim.org/) - Web accessibility evaluation tool
+- [Color Contrast Analyzers](https://www.tpgi.com/color-contrast-checker/) - Manual contrast testing
+
+### Learning Resources  
+
+- [WebAIM](https://webaim.org/) - Accessibility training and resources
+- [A11y Project](https://www.a11yproject.com/) - Community-driven accessibility knowledge
+- [Deque University](https://dequeuniversity.com/) - Professional accessibility training
+
+---
+
+## 🎉 Get Started Today
+
+Ready to make your web content more accessible? Run the setup script and start getting detailed, educational accessibility feedback:
+
+```bash
+cd mcp-accessibility-evaluator
+./setup-mcp.sh
+```bash
+
+Your AI assistant will guide you through creating more inclusive web experiences! 🌟

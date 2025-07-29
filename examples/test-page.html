@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Accessibility Test Page</title>
+    <style>
+        .low-contrast {
+            color: #777;
+            background-color: #888;
+        }
+    </style>
+</head>
+<body>
+    <!-- Missing language attribute on html element -->
+    
+    <!-- Image without alt text -->
+    <img src="logo.png" width="200" height="100">
+    
+    <!-- Skipped heading level -->
+    <h3>Welcome to Our Site</h3>
+    
+    <!-- Form without proper labels -->
+    <form>
+        <input type="text" placeholder="Enter your name">
+        <input type="email" placeholder="Enter your email">
+        <select>
+            <option>Choose country</option>
+            <option>USA</option>
+            <option>UK</option>
+        </select>
+        <button>Submit</button>
+    </form>
+    
+    <!-- Low contrast text -->
+    <p class="low-contrast">This text has poor color contrast</p>
+    
+    <!-- Improper ARIA usage -->
+    <nav role="navigation"> <!-- Redundant role -->
+        <ul role="menu">
+            <li role="menuitem" aria-checked="true">Home</li> <!-- Wrong attribute -->
+            <li role="menuitem">About</li>
+            <li role="tab">Contact</li> <!-- Wrong parent -->
+        </ul>
+    </nav>
+    
+    <!-- Hidden focusable content -->
+    <div aria-hidden="true">
+        <button>Hidden Button</button>
+        <a href="#">Hidden Link</a>
+    </div>
+    
+    <!-- Multiple main landmarks without labels -->
+    <main role="main">
+        <h2>Main Content</h2>
+    </main>
+    
+    <div role="main">
+        <h2>Another Main Section</h2>
+    </div>
+    
+    <!-- Missing required ARIA attributes -->
+    <div role="checkbox">Agree to terms</div>
+    
+    <!-- Invalid ARIA attribute values -->
+    <button aria-expanded="yes">Menu</button>
+    
+    <!-- Empty ARIA label -->
+    <section aria-label="">
+        <h2>News Section</h2>
+    </section>
+</body>
+</html> 

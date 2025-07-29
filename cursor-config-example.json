@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "accessibility-evaluator": {
+      "command": "node",
+      "args": [
+        "/Users/tvance/Sites/github-service/mcp-accessibility-evaluator/dist/index.js"
+      ]
+    }
+  }
+}

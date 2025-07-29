@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "accessibility-evaluator": {
+      "command": "node",
+      "args": [
+        "/Users/your-username/projects/mcp-accessibility-evaluator/dist/index.js"
+      ],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  }
+}

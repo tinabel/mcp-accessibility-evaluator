@@ -1,0 +1,35 @@
+{
+  "wcag": {
+    "defaultLevel": "AA",
+    "strictMode": false,
+    "disabledCriteria": ["3.1.5"]
+  },
+  "aria": {
+    "enableValidation": true,
+    "ignoreDeprecated": true,
+    "strictMode": false
+  },
+  "evaluation": {
+    "includePassedChecks": false,
+    "minImpactLevel": "moderate",
+    "enableEnhancedExplanations": true,
+    "includeCodeExamples": true,
+    "enableDocumentationLinks": true
+  },
+  "reporting": {
+    "format": "detailed",
+    "includeRecommendations": true,
+    "groupByPrinciple": false,
+    "showProgressScores": true,
+    "includeMetadata": false
+  },
+  "axe": {
+    "rules": {
+      "bypass": { "enabled": false },
+      "landmark-one-main": { "enabled": false },
+      "page-has-heading-one": { "enabled": false }
+    },
+    "tags": ["wcag2a", "wcag2aa", "wcag21aa"],
+    "resultTypes": ["violations", "incomplete"]
+  }
+} 

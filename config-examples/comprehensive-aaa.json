@@ -1,0 +1,29 @@
+{
+  "wcag": {
+    "defaultLevel": "AAA",
+    "strictMode": true
+  },
+  "aria": {
+    "enableValidation": true,
+    "ignoreDeprecated": false,
+    "strictMode": true
+  },
+  "evaluation": {
+    "includePassedChecks": true,
+    "minImpactLevel": "minor",
+    "enableEnhancedExplanations": true,
+    "includeCodeExamples": true,
+    "enableDocumentationLinks": true
+  },
+  "reporting": {
+    "format": "detailed",
+    "includeRecommendations": true,
+    "groupByPrinciple": true,
+    "showProgressScores": true,
+    "includeMetadata": true
+  },
+  "axe": {
+    "tags": ["wcag2a", "wcag2aa", "wcag2aaa", "wcag21aa", "wcag21aaa", "best-practice"],
+    "resultTypes": ["violations", "incomplete", "passes"]
+  }
+} 

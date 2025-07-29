@@ -1,0 +1,22 @@
+{
+  "wcag": {
+    "defaultLevel": "A",
+    "strictMode": false
+  },
+  "aria": {
+    "enableValidation": true,
+    "ignoreDeprecated": true
+  },
+  "evaluation": {
+    "includePassedChecks": false,
+    "minImpactLevel": "serious",
+    "enableEnhancedExplanations": true,
+    "includeCodeExamples": false,
+    "enableDocumentationLinks": false
+  },
+  "reporting": {
+    "format": "summary",
+    "includeRecommendations": true,
+    "showProgressScores": false
+  }
+} 

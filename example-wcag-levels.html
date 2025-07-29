@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WCAG Level Test Page</title>
+    <style>
+        /* Poor contrast - AA level issue */
+        .poor-contrast {
+            color: #999999;
+            background-color: #ffffff;
+        }
+        
+        /* Very poor contrast - A level issue */
+        .very-poor-contrast {
+            color: #cccccc;
+            background-color: #ffffff;
+        }
+        
+        /* Good contrast for AAA */
+        .excellent-contrast {
+            color: #000000;
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <h1>WCAG Level Testing</h1>
+    
+    <!-- Level A Issues -->
+    <img src="image.jpg">  <!-- Missing alt text - Level A -->
+    
+    <h1>Main Title</h1>
+    <h3>Skipped Heading Level</h3>  <!-- Skipped h2 - Level A -->
+    
+    <!-- Level AA Issues -->
+    <p class="poor-contrast">This text has poor contrast ratio (AA issue)</p>
+    
+    <!-- Level AAA Issues -->
+    <p class="very-poor-contrast">This text has very poor contrast (would be AAA issue if AA passes)</p>
+    
+    <!-- Good practices -->
+    <img src="logo.jpg" alt="Company Logo">
+    <p class="excellent-contrast">This text has excellent contrast</p>
+    
+    <h2>Proper Heading Hierarchy</h2>
+    <p>This section follows proper heading structure.</p>
+    
+    <form>
+        <label for="email">Email Address:</label>
+        <input type="email" id="email" name="email">
+        
+        <!-- Missing label - Level A issue -->
+        <input type="text" placeholder="Name">
+    </form>
+</body>
+</html> 
